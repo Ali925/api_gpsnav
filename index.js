@@ -389,6 +389,6 @@ app.post('/del/sectors', function(req, res){
 	});
 });
 
-app.listen(443, function(){
+app.listen(3000, function(){
 	console.log('Running on 443!');
 });
