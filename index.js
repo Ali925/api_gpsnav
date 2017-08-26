@@ -15,6 +15,7 @@ app.use(session({keys: ['secret']}));
 var sql = require('./models/sqlConn');  
 
 app.use(cors());
+app.set('port', (process.env.PORT || 5000));
 
 var usersObj = {};
 
@@ -389,6 +390,6 @@ app.post('/del/sectors', function(req, res){
 	});
 });
 
-app.listen(3000, function(){
-	console.log('Running on 443!');
+app.listen(app.get('port'), function(){
+	console.log('Running on 5000!');
 });
