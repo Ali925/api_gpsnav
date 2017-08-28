@@ -32,7 +32,7 @@ var mustBeAuthenticated = function(req, res, next) {
 }
 
 app.post('/login', function(req, res, next) {
-		console.log('user: ', req.body);
+		console.log('user: ', req.body, req.query, req);
 		var creds = {
 			username: req.body.username.toString(),
 			password: req.body.password.toString()
