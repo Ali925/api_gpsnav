@@ -32,10 +32,10 @@ var mustBeAuthenticated = function(req, res, next) {
 }
 
 app.post('/login', function(req, res, next) {
-		console.log('user: ', req.body, req.query, req);
+		console.log('user: ', req.body, req.query);
 		var creds = {
-			username: req.body.username.toString(),
-			password: req.body.password.toString()
+			username: req.body.username,
+			password: req.body.password
 		};
 
 		sql.users.getUser(creds, function(error, results, fields){
