@@ -303,6 +303,7 @@ app.get('/get/list/coordinates', function(req, res){
 });
 
 app.post('/set/coordinates', function(req, res){
+	console.log('coords: ', req.body);
 	var now = new Date();
 
 	var data = {
@@ -319,7 +320,7 @@ app.post('/set/coordinates', function(req, res){
 
 	} 
 
-	console.log('coords: ', req.body);
+	
 	
 	sql.trace.setCoord(data, function(error, results, fields){
 		console.log('set coord: ', error, results);
