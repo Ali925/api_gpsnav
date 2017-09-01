@@ -28,7 +28,7 @@ var mustBeAuthenticated = function(req, res, next) {
 	else
 		api_key = req.body.api_token;
 
-	usersObj[api_key] ? next() : res.send("You haven't permission!");
+	usersObj[api_key] ? next() : res.send({"message": "You haven't permission!"});
 }
 
 app.post('/login', function(req, res, next) {
