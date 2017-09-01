@@ -315,7 +315,7 @@ app.post('/set/coordinates', function(req, res){
 
 	if(req.body.isManual){
 		data.isManual = 1;
-		data.isSuccess = req.body.isSuccess ? 1 : 0;
+		data.isSuccess = parseInt(req.body.isSuccess);
 		data.comment = req.body.comment;
 
 	} 
