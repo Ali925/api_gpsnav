@@ -55,7 +55,7 @@ app.post('/login', function(req, res, next) {
 					var userType;
 
 					if(results[0].usertype == 1)
-						userType = 'administrator'
+						userType = 'administrator';
 					else if(results[0].usertype == 2)
 						userType = 'manager';
 					else
@@ -318,8 +318,11 @@ app.post('/set/coordinates', function(req, res){
 		data.comment = req.body.comment;
 
 	} 
+
+	console.log('coords: ', req.body);
 	
 	sql.trace.setCoord(data, function(error, results, fields){
+		console.log('set coord: ', error, results);
 		if(error)
 			res.send(error);
 		else
