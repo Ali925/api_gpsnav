@@ -20,7 +20,7 @@ app.set('port', (process.env.PORT || 5000));
 var usersObj = {};
 
 var mustBeAuthenticated = function(req, res, next) {
-	//console.log(req.method, req.body, req.params, req.query);
+	console.log('auth: ', req.body, req.query);
 	var api_key;
 
 	if(req.method == 'GET')
