@@ -360,6 +360,7 @@ app.post('/add/sectors', function(req, res){
 	};
 
 	sql.sectors.addSectors(data, function(error, results, fields){
+		console.log('results: ', results);
 		if(error)
 			res.send(error);
 		else
