@@ -360,11 +360,12 @@ app.post('/add/sectors', function(req, res){
 	};
 
 	sql.sectors.addSectors(data, function(error, results, fields){
-		console.log('results: ', results);
 		if(error)
-			res.send(error);
+			res.send({'message':'fail'});
+		else if(results.affectedRows)
+			res.send({'message':'success'});	
 		else
-			res.send('success');
+			res.send({'message':'fail'});	
 	});
 });
 
