@@ -317,6 +317,9 @@ app.post('/set/coordinates', function(req, res){
 		data.isManual = 1;
 		data.isSuccess = parseInt(req.body.isSuccess);
 		data.comment = req.body.comment;
+		
+		if(req.body.newsNum !== undefined && req.body.newsNum !== null)
+			data.news_num = req.body.newsNum;
 	} else
 		data.isManual = 0;
 
