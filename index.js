@@ -346,6 +346,8 @@ app.get('/get/list/sectors', function(req, res){
 					results[r].editable = true;
 				else
 					results[r].editable = false;
+
+				results[r].coords = JSON.parse(results[r].coords);	
 			}
 			if(error)
 				res.send(error);
