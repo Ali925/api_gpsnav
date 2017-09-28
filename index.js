@@ -15,7 +15,7 @@ app.use(session({keys: ['secret']}));
 var sql = require('./models/sqlConn');  
 
 app.use(cors({
-  "origin": "*",
+  "origin": "https://courier-tracer.herokuapp.com",
   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
   "preflightContinue": true,
   "optionsSuccessStatus": 204
