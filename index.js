@@ -349,8 +349,10 @@ app.get('/get/list/sectors', function(req, res){
 
 				results[r].coords = JSON.parse(results[r].coords);	
 			}
-			if(error)
+			if(error){
+				console.log(error);
 				res.send(error);
+			}
 			else
 				res.json(results);
 		});
