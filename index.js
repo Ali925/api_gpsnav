@@ -15,11 +15,13 @@ app.use(session({keys: ['secret']}));
 var sql = require('./models/sqlConn');  
 
 app.use(cors({
-  "origin": "https://courier-tracer.herokuapp.com",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "origin": true,
+  "credentials": true,
+  "methods": "OPTIONS,GET,HEAD,PUT,PATCH,POST,DELETE",
   "preflightContinue": true,
   "optionsSuccessStatus": 204
 }));
+
 app.set('port', (process.env.PORT || 5000));
 
 var usersObj = {};
