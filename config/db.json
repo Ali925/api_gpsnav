@@ -1,5 +1,5 @@
 {
-  "host"     : "194.58.119.225",
+  "host"     : "localhost",
   "user"     : "root",
   "password" : "couriers1992",
   "database" : "couriers"
