@@ -1,6 +1,6 @@
 {
-  "host"     : "sql11.freemysqlhosting.net",
-  "user"     : "sql11195993",
-  "password" : "894hjlbwHc",
-  "database" : "sql11195993"
+  "host"     : "194.58.119.225",
+  "user"     : "root",
+  "password" : "couriers1992",
+  "database" : "couriers"
 }
