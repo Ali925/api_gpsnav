@@ -370,7 +370,7 @@ app.post('/add/sectors', function(req, res){
 		if(error)
 			res.send({'message':'fail'});
 		else if(results.affectedRows)
-			res.send({'message':'success'});	
+			res.send('success');	
 		else
 			res.send({'message':'fail'});	
 	});
