@@ -304,7 +304,7 @@ app.get('/get/list/coordinates', function(req, res){
 
 app.post('/set/coordinates', function(req, res){
 	console.log('coords: ', req.body);
-	var reqBody = req.body.
+	var reqBody = req.body;
 	var now = new Date();
 
 	var data = {
