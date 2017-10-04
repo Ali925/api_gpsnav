@@ -335,7 +335,8 @@ app.post('/set/coordinates', function(req, res){
 					sector_id: reqBody.sectorId,
 					sector_num: reqBody.sectorNum,
 					count: reqBody.newsNum,
-					courier_id: usersObj[reqBody.api_token].user_id
+					courier_id: usersObj[reqBody.api_token].user_id,
+					date: now
 				};
 
 				sql.products.setProduct(prodData, function(error, results, fields){
