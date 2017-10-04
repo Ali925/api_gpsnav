@@ -295,10 +295,23 @@ app.get('/get/list/coordinates', function(req, res){
 	};
 
 	sql.trace.getCoords(data, function(error, results, fields){
+		var coordResults = results;
+
 		if(error)
 			res.send(error);
-		else
-			res.json(results);	
+		else{
+			sql.products.getProducts(function(error, results, fields){
+					var prodResults = results;
+
+					if(error){
+						res.send(error);
+					}
+					else {
+						res.json({prodResults: prodResults, coordResults: coordResults});
+					}
+				});
+				
+		}
 	});
 });
 
@@ -365,14 +378,7 @@ app.get('/get/list/sectors', function(req, res){
 				res.send(error);
 			}
 			else{
-				sql.products.getProducts(function(error, results, fields){
-					if(error){
-						res.send(error);
-					}
-					else {
-						var prodResults = results;
-
-						for(var r in sectResults){
+				for(var r in sectResults){
 							if(sectResults[r].manager_id == usersObj[userApi].user_id || usersObj[userApi].user_type == 1)
 								sectResults[r].editable = true;
 							else
@@ -381,13 +387,7 @@ app.get('/get/list/sectors', function(req, res){
 							sectResults[r].coords = JSON.parse(sectResults[r].coords);	
 						}
 
-						var sendData = {
-							prod_results: prodResults,
-							sect_results: sectResults
-						};
-						res.json(sendData);
-					}
-				});
+						res.json(sectResults);
 			}
 		});
 });
