@@ -304,33 +304,50 @@ app.get('/get/list/coordinates', function(req, res){
 
 app.post('/set/coordinates', function(req, res){
 	console.log('coords: ', req.body);
+	var reqBody = req.body.
 	var now = new Date();
 
 	var data = {
-		latitude: req.body.latitude,
-		longitude: req.body.longitude,
-		courier_id: usersObj[req.body.api_token].user_id,
+		latitude: reqBody.latitude,
+		longitude: reqBody.longitude,
+		courier_id: usersObj[reqBody.api_token].user_id,
 		date: now
 	};
 
-	if(req.body.isManual){
+	if(reqBody.isManual){
 		data.isManual = 1;
-		data.isSuccess = parseInt(req.body.isSuccess);
-		data.comment = req.body.comment;
+		data.isSuccess = parseInt(reqBody.isSuccess);
+		data.comment = reqBody.comment;
 		
-		if(req.body.newsNum !== undefined && req.body.newsNum !== null)
-			data.news_num = req.body.newsNum;
+		if(reqBody.newsNum !== undefined && reqBody.newsNum !== null)
+			data.news_num = reqBody.newsNum;
 	} else
 		data.isManual = 0;
 
 	
 	
 	sql.trace.setCoord(data, function(error, results, fields){
-		console.log('set coord: ', error, results);
 		if(error)
 			res.send(error);
-		else
-			res.send('success');
+		else{
+			if(reqBody.isManual && reqBody.newsNum){
+				var prodData = {
+					sector_id: reqBody.sectorId,
+					sector_num: reqBody.sectorNum,
+					count: reqBody.newsNum,
+					courier_id: usersObj[reqBody.api_token].user_id
+				};
+
+				sql.products.setProduct(prodData, function(error, results, fields){
+					if(error)
+						res.send(error);
+					else 
+						res.send('success');	
+				});
+			}
+			else
+				res.send('success');
+		}
 	});
 	
 
@@ -341,20 +358,36 @@ app.post('/set/coordinates', function(req, res){
 app.get('/get/list/sectors', function(req, res){
 	var userApi = req.query.api_token;
 	sql.sectors.getSectors(function(error, results, fields){
-			for(var r in results){
-				if(results[r].manager_id == usersObj[userApi].user_id || usersObj[userApi].user_type == 1)
-					results[r].editable = true;
-				else
-					results[r].editable = false;
+			var sectResults = results;
 
-				results[r].coords = JSON.parse(results[r].coords);	
-			}
 			if(error){
-				console.log(error);
 				res.send(error);
 			}
-			else
-				res.json(results);
+			else{
+				sql.products.getProducts(function(error, results, fields){
+					if(error){
+						res.send(error);
+					}
+					else {
+						var prodResults = results;
+
+						for(var r in sectResults){
+							if(sectResults[r].manager_id == usersObj[userApi].user_id || usersObj[userApi].user_type == 1)
+								sectResults[r].editable = true;
+							else
+								sectResults[r].editable = false;
+
+							sectResults[r].coords = JSON.parse(sectResults[r].coords);	
+						}
+
+						var sendData = {
+							prod_results: prodResults,
+							sect_results: sectResults
+						};
+						res.json(sendData);
+					}
+				});
+			}
 		});
 });
 

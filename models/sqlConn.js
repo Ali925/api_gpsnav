@@ -9,5 +9,6 @@ var crypto = require('crypto');
 module.exports = {
 	users: require('./users.js')(connection, crypto),
 	trace: require('./trace.js')(connection),
-	sectors: require('./sectors.js')(connection)
+	sectors: require('./sectors.js')(connection),
+	products: require('./products.js')(connection)
 }
