@@ -403,26 +403,26 @@ app.post('/add/sectors', function(req, res){
 	sql.sectors.addSectors(data, function(error, results, fields){
 		if(error)
 			res.send({'message':'fail'});
-		else if(results.affectedRows)
-			res.send('success');	
-		else
-			res.send({'message':'fail'});	
+		else 
+			res.send({'message': 'success', 'id': results.insertId});	
+	
 	});
 });
 
 app.post('/edit/sectors', function(req, res){
 	var data = {
-		title: req.body.sectorTitle,
-		coords: JSON.stringify(req.body.sectorCoords)
+		title: req.body.sectorTitle
 	};
+
+	if(req.body.sectorCoords)
+		data.coords = JSON.stringify(req.body.sectorCoords);
 
 	sql.sectors.editSectors(req.body.sectorID, data, function(error, results, fields){
 		if(error)
 			res.send(error);
-		else if(results.changedRows)
+		else 
 			res.send('success');	
-		else
-			res.send('not found');
+
 	});
 });
 
