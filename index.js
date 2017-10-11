@@ -6,6 +6,9 @@ var crypto = require('crypto');
 var bodyParser = require('body-parser');
 app.use(bodyParser());
 
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+
 var cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
