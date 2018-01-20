@@ -1,7 +1,7 @@
 {
   "host"     : "localhost",
   "user"     : "root",
-  "password" : "couriers1992",
+  "password" : "MyNewPass",
   "database" : "couriers"
 }
 

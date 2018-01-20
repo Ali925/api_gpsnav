@@ -17,6 +17,6 @@
     "crypto": "^1.0.1",
     "express": "^4.15.3",
     "express-session": "^1.15.4",
-    "mysql": "github:mysqljs/mysql"
+    "mysql": "^2.15.0"
   }
 }
