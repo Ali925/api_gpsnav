@@ -371,6 +371,14 @@ app.post('/set/coordinates', function(req, res){
 
 // sectors api 
 
+app.get('/startSector', function(req, res){
+	res.send('Sector started.');
+});
+
+app.get('/endSector', function(req, res){
+	res.send('Sector ended.');
+});
+
 app.get('/get/list/sectors', function(req, res){
 	var userApi = req.query.api_token;
 	sql.sectors.getSectors(function(error, results, fields){
