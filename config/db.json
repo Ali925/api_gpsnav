@@ -1,7 +1,6 @@
 {
-  "host"     : "localhost",
-  "user"     : "root",
-  "password" : "MyNewPass",
-  "database" : "couriers"
+	"host"     : "localhost",
+	"user"     : "root",
+	"password" : "MyNewPass",
+	"database" : "couriers"
 }
-

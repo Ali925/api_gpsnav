@@ -2,6 +2,8 @@ var express = require('express');
 var cors = require('cors');
 var app  = express();
 var crypto = require('crypto');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 var bodyParser = require('body-parser');
 
@@ -69,6 +71,9 @@ app.post('/login', function(req, res, next) {
 						user_id: results[0].id
 					};	
 
+					if(usersObj[api_key].user_type == 3)
+						usersObj[api_key].startedTrace = false;
+
 			 		res.json({message: {api: api_key, user_type: userType}});
 			 	}
 
@@ -95,6 +100,9 @@ app.get('/profile', function(req, res){
 });
 
 app.get('/logout', function(req, res) {
+	var userApi = req.query.api_token;
+	usersObj[userApi].startedTrace = false;
+	io.sockets.emit('couirerOffline', {user_id: usersObj[userApi].user_id});
 	delete usersObj[req.query.api_token];
 	res.send("You logged out!");
 });
@@ -111,8 +119,17 @@ app.get('/get/list/courier', function(req, res){
 	sql.users.getUsers(data, function(error, results, fields){
 		if(error)
 			res.send(error);
-		else
+		else{
+			for(var u in usersObj){
+				if(usersObj[u].startedTrace){
+					for(var r in results){
+						if(results[r].id == usersObj[u].user_id)
+							results[r].startedTrace = true;
+					}
+				}
+			}
 			res.json(results);	
+		}
 	});
 });
 
@@ -120,8 +137,9 @@ app.get('/get/courier', function(req, res){
 	sql.users.getUserById(req.query.userID, function(error, results, fields){
 		if (error)
 			res.send(error);
-		else
+		else{	
 			res.json(results[0]);
+		}
 	});
 });
 
@@ -357,12 +375,34 @@ app.post('/set/coordinates', function(req, res){
 				sql.products.setProduct(prodData, function(error, results, fields){
 					if(error)
 						res.send(error);
-					else 
-						res.send('success');	
+					else{ 
+							if(usersObj[reqBody.api_token].startedTrace){
+								usersObj[reqBody.api_token].lastTime = (new Date()).getTime();
+								io.sockets.emit('currentCoord', data);	
+							} else {
+								usersObj[reqBody.api_token].startedTrace = true;
+								usersObj[reqBody.api_token].lastTime = (new Date()).getTime();
+								io.sockets.emit('couirerOnline', {user_id: usersObj[reqBody.api_token].user_id});
+								sectorInterval(reqBody.api_token);
+								io.sockets.emit('currentCoord', data);
+							}
+							res.send('success');
+						}	
 				});
 			}
-			else
+			else{
+				if(usersObj[reqBody.api_token].startedTrace){
+					usersObj[reqBody.api_token].lastTime = (new Date()).getTime();
+					io.sockets.emit('currentCoord', data);
+				} else {
+					usersObj[reqBody.api_token].startedTrace = true;
+					usersObj[reqBody.api_token].lastTime = (new Date()).getTime();
+					io.sockets.emit('couirerOnline', {user_id: usersObj[reqBody.api_token].user_id});
+					sectorInterval(reqBody.api_token);
+					io.sockets.emit('currentCoord', data);
+				}
 				res.send('success');
+			}
 		}
 	});
 	
@@ -372,12 +412,32 @@ app.post('/set/coordinates', function(req, res){
 // sectors api 
 
 app.get('/startSector', function(req, res){
+	var userApi = req.query.api_token;
+	usersObj[userApi].startedTrace = true;
+	usersObj[userApi].lastTime = (new Date()).getTime();
+	io.sockets.emit('couirerOnline', {user_id: usersObj[userApi].user_id});
+	sectorInterval(userApi);
 	res.send('Sector started.');
 });
 
 app.get('/endSector', function(req, res){
+	var userApi = req.query.api_token;
+	usersObj[userApi].startedTrace = false;
+	io.sockets.emit('couirerOffline', {user_id: usersObj[userApi].user_id});
 	res.send('Sector ended.');
 });
+
+function sectorInterval(api){
+	var myInterval = setInterval(function(){
+		var now = (new Date().getTime());
+		var dist = now - usersObj[api].lastTime;
+		if(dist>=9999){
+			usersObj[api].startedTrace = false;
+			io.sockets.emit('couirerOffline', {user_id: usersObj[api].user_id});
+			clearInterval(myInterval);
+		}
+	}, 10000);
+}
 
 app.get('/get/list/sectors', function(req, res){
 	var userApi = req.query.api_token;
@@ -447,6 +507,7 @@ app.post('/del/sectors', function(req, res){
 	});
 });
 
-app.listen(app.get('port'), function(){
+
+server.listen(app.get('port'), function(){
 	console.log('Running on 5000!');
 });
