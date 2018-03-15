@@ -336,7 +336,7 @@ app.get('/get/list/coordinates', function(req, res){
 });
 
 app.post('/set/coordinates', function(req, res){
-	console.log('coords: ', req.body);
+	console.log('setted coords: ', req.body);
 	var reqBody = req.body;
 	var now = new Date();
 
@@ -413,6 +413,7 @@ app.post('/set/coordinates', function(req, res){
 
 app.get('/startSector', function(req, res){
 	var userApi = req.query.api_token;
+	console.log("sector started: ", usersObj[userApi]);
 	usersObj[userApi].startedTrace = true;
 	usersObj[userApi].lastTime = (new Date()).getTime();
 	io.sockets.emit('couirerOnline', {user_id: usersObj[userApi].user_id});
@@ -422,6 +423,7 @@ app.get('/startSector', function(req, res){
 
 app.get('/endSector', function(req, res){
 	var userApi = req.query.api_token;
+	console.log("sector ended: ", usersObj[userApi]);
 	usersObj[userApi].startedTrace = false;
 	io.sockets.emit('couirerOffline', {user_id: usersObj[userApi].user_id});
 	res.send('Sector ended.');
