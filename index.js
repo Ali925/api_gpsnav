@@ -431,12 +431,12 @@ function sectorInterval(api){
 	var myInterval = setInterval(function(){
 		var now = (new Date().getTime());
 		var dist = now - usersObj[api].lastTime;
-		if(dist>=9999){
+		if(dist>=299999){
 			usersObj[api].startedTrace = false;
 			io.sockets.emit('couirerOffline', {user_id: usersObj[api].user_id});
 			clearInterval(myInterval);
 		}
-	}, 10000);
+	}, 300000);
 }
 
 app.get('/get/list/sectors', function(req, res){
