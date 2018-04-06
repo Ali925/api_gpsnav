@@ -147,6 +147,7 @@ app.post('/add/courier', function(req, res){
 	var data = {
 		username: req.body.username,
 		password: req.body.password,
+		passcode: req.body.passcode ? req.body.passcode : null,
 		email: req.body.email ? req.body.email : null,
 		phone: req.body.phone ? req.body.phone : null,
 		first_name: req.body.first_name ? req.body.first_name : null,
