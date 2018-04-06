@@ -188,6 +188,8 @@ app.post('/edit/courier', function(req, res){
 		data.username = req.body.username;
 	if(req.body.password)
 		data.password = req.body.password;
+	if(req.body.passcode)
+		data.passcode = req.body.passcode;	
 	if(req.body.email)
 		data.email = req.body.email;
 	if(req.body.phone)
