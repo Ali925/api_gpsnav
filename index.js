@@ -368,16 +368,18 @@ app.post('/set/coordinates', function(req, res){
 		else{
 			if(reqBody.isManual && reqBody.newsNum){
 				var prodData = {
-					sector_id: reqBody.sectorId,
-					sector_num: reqBody.sectorNum,
+					sector_id: reqBody.sector_id,
+					sector_num: reqBody.sector_num,
 					count: reqBody.newsNum,
 					courier_id: usersObj[reqBody.api_token].user_id,
 					date: now
 				};
 
 				sql.products.setProduct(prodData, function(error, results, fields){
-					if(error)
+					if(error){
+						console.log(error);
 						res.send(error);
+					}
 					else{ 
 							if(usersObj[reqBody.api_token].startedTrace){
 								usersObj[reqBody.api_token].lastTime = (new Date()).getTime();
